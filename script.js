@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
 
    function showSection(section) {
     if (section === "home") showHome();
+    if (section === "tasks") showTasks();
     if (section === "users") showUsers();
     if (section === "logs") showLogs();
   }
@@ -202,12 +203,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
       <h3>System Metrics</h3>
       <div class="cards" id="metric-cards"></div>
     </section>
-
-    <section class="home-tasks">
-      <h3>Recent Tasks / To-Do</h3>
-      <div id="task-list"></div>
-      <button id="add-task-btn">Add Task</button>
-    </section>
   `;
 
   const timeEl = document.getElementById("current-time");
@@ -295,8 +290,17 @@ function renderMetrics() {
   renderMetrics();
   setInterval(renderMetrics, 4000);
 
-  // Tasks
-  let tasks = loadData("tasks") || [];
+
+}
+    function showTasks() {
+        content.innerHTML=`
+        <section class="home-tasks">
+        <h3>Recent Tasks / To-Do</h3>
+        <div id="task-list"></div>
+        <button id="add-task-btn">Add Task</button>
+        </section>
+        `;
+          let tasks = loadData("tasks") || [];
   const taskListEl = document.getElementById("task-list");
 
   function renderTasks() {
@@ -329,5 +333,5 @@ function renderMetrics() {
     renderTasks();
   });
   renderTasks();
-}
+    }
 });
