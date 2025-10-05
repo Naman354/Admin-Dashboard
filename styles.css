@@ -157,3 +157,17 @@ button:hover {
   margin-bottom: 0.4rem;
   background: #fff;
 }
+
+.metric-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+}
+
+.metrics h3 {
+  margin-bottom: 0.75rem;
+}

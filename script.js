@@ -181,6 +181,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
   } function showHome() {
   const totalUsers = users.length;
   const admins = users.filter(u => u.role === "Admin").length;
+  const editors = users.filter(u => u.role === "Editor").length;
+  const viewers = users.filter(u => u.role === "Viewer").length;
 
   content.innerHTML = `
     <section class="home-welcome">
@@ -189,8 +191,15 @@ document.addEventListener("DOMContentLoaded", ()=> {
       <div class="cards">
         <div class="card"><strong>${totalUsers}</strong><div>Total Users</div></div>
         <div class="card"><strong>${admins}</strong><div>Admins</div></div>
+        <div class="card"><strong>${editors}</strong><div>Editors</div></div>
+        <div class="card"><strong>${viewers}</strong><div>Viewers</div></div>
         <div class="card" id="current-time"><strong>${new Date().toLocaleTimeString()}</strong><div>Current Time</div></div>
       </div>
+    </section>
+
+     <section class="metrics">
+      <h3>System Metrics</h3>
+      <div class="cards" id="metric-cards"></div>
     </section>
 
     <section class="home-tasks">
@@ -204,6 +213,28 @@ document.addEventListener("DOMContentLoaded", ()=> {
   setInterval(() => {
     timeEl.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong><div>Current Time</div>`;
   }, 1000);
+
+  const metricData = [
+    { name: "Server Load", value: () => `${(Math.random() * 100).toFixed(1)}%` },
+    { name: "API Requests", value: () => Math.floor(Math.random() * 10000) },
+    { name: "Active Sessions", value: () => Math.floor(Math.random() * 500) },
+    { name: "DB Latency", value: () => `${(Math.random() * 120).toFixed(2)} ms` },
+    { name: "Error Rate", value: () => `${(Math.random() * 3).toFixed(2)}%` }
+  ];
+
+  const metricCards = document.getElementById("metric-cards");
+
+  function renderMetrics() {
+    metricCards.innerHTML = metricData.map(m => `
+      <div class="card metric-card">
+        <strong>${m.value()}</strong>
+        <div>${m.name}</div>
+      </div>
+    `).join("");
+  }
+  
+  renderMetrics();
+  setInterval(renderMetrics, 4000);
 
   let tasks = loadData("tasks") || [];
   const taskListEl = document.getElementById("task-list");
