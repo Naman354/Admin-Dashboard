@@ -189,10 +189,16 @@ document.addEventListener("DOMContentLoaded", ()=> {
         saveData("logs", logs);
     }
 
-    function onSearch(e) {
-        searchText = e.target.value.toLowerCase();
+  let searchTimeout;
+
+function onSearch(e) {
+    clearTimeout(searchTimeout);
+    const query = e.target.value.toLowerCase();
+    searchTimeout = setTimeout(() => {
+        searchText = query;
         showUsers();
-    }
+    }, 300); 
+}
 
     function sortBy(key) {
         if (sortKey === key) sortDirection *= -1;
