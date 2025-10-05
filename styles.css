@@ -71,3 +71,89 @@ body {
   align-items: center;
   margin-bottom: 1rem;
 }
+
+.cards {
+  display: flex;
+  gap: 1rem;
+}
+
+.card {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  min-width: 150px;
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.users-table th,
+.users-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #eef2f7;
+  text-align: left;
+}
+
+.users-table th {
+  background: #f3f4f6;
+  cursor: pointer;
+}
+
+.users-table tbody tr:hover {
+  background: #fbfcfe;
+}
+
+#search-input {
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-right: 0.5rem;
+}
+
+button {
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #f3f4f6;
+}
+
+.btn-edit {
+  margin-right: 0.4rem;
+}
+
+.home-welcome, .home-tasks {
+  margin-bottom: 2rem;
+}
+
+#task-list {
+  margin-top: 0.5rem;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 0.4rem;
+  background: #fff;
+}
