@@ -178,7 +178,8 @@ document.addEventListener("DOMContentLoaded", ()=> {
       sortDirection = 1;
     }
     showUsers();
-  } function showHome() {
+  } 
+  function showHome() {
   const totalUsers = users.length;
   const admins = users.filter(u => u.role === "Admin").length;
   const editors = users.filter(u => u.role === "Editor").length;
@@ -197,7 +198,7 @@ document.addEventListener("DOMContentLoaded", ()=> {
       </div>
     </section>
 
-     <section class="metrics">
+    <section class="metrics">
       <h3>System Metrics</h3>
       <div class="cards" id="metric-cards"></div>
     </section>
@@ -215,27 +216,86 @@ document.addEventListener("DOMContentLoaded", ()=> {
   }, 1000);
 
   const metricData = [
-    { name: "Server Load", value: () => `${(Math.random() * 100).toFixed(1)}%` },
-    { name: "API Requests", value: () => Math.floor(Math.random() * 10000) },
-    { name: "Active Sessions", value: () => Math.floor(Math.random() * 500) },
-    { name: "DB Latency", value: () => `${(Math.random() * 120).toFixed(2)} ms` },
-    { name: "Error Rate", value: () => `${(Math.random() * 3).toFixed(2)}%` }
+    { name: "Server Load", value: () => (Math.random() * 100).toFixed(1), unit: "%", hasBar: true },
+    { name: "API Requests", value: () => Math.floor(Math.random() * 10000), unit: "", hasBar: false },
+    { name: "Active Sessions", value: () => Math.floor(Math.random() * 500), unit: "", hasBar: false },
+    { name: "DB Latency", value: () => (Math.random() * 120).toFixed(2), unit: " ms", hasBar: true },
+    { name: "Error Rate", value: () => (Math.random() * 3).toFixed(2), unit: "%", hasBar: true }
   ];
 
   const metricCards = document.getElementById("metric-cards");
+function renderMetrics() {
+  const metricValues = metricData.map(m => {
+    const rawVal = m.value();
+    const numericValue = parseFloat(rawVal);
+    return { ...m, rawVal, numericValue };
+  });
 
-  function renderMetrics() {
-    metricCards.innerHTML = metricData.map(m => `
-      <div class="card metric-card">
-        <strong>${m.value()}</strong>
-        <div>${m.name}</div>
+  if (!document.querySelector("#server-load-chart")) {
+    metricCards.innerHTML = `
+      <div class="server-load-card card">
+        <h3>Server Load</h3>
+        <p class="metric-value">${metricValues[0].rawVal}${metricValues[0].unit}</p>
+        <div class="metric-bar">
+          <div class="metric-bar-fill" style="width: 0%;"></div>
+        </div>
+        <canvas id="server-load-chart" width="200" height="150"></canvas>
       </div>
-    `).join("");
+      <div class="other-metrics">
+        ${metricValues.slice(1).map(m => `
+          <div class="card metric-card">
+            <h3>${m.name}</h3>
+            <p class="metric-value">${m.rawVal}${m.unit}</p>
+          </div>
+        `).join("")}
+      </div>
+    `;
+
+    const ctx = document.getElementById("server-load-chart").getContext("2d");
+    window.serverChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: ["CPU", "Memory", "Disk", "Network"],
+        datasets: [{
+          label: "Usage %",
+          data: [30, 50, 60, 40],
+          fill: true,
+          backgroundColor: "rgba(37, 99, 235, 0.2)",
+          borderColor: "rgba(37, 99, 235, 1)",
+          tension: 0.4,
+          pointRadius: 5,
+          pointBackgroundColor: "rgba(37, 99, 235, 1)"
+        }]
+      },
+      options: {
+        responsive: true,
+        animation: { duration: 1000, easing: 'easeOutQuart' },
+        scales: {
+          y: { beginAtZero: true, max: 100, ticks: { stepSize: 25 } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
   }
-  
+
+  const bar = document.querySelector(".server-load-card .metric-bar-fill");
+  const serverLoad = metricValues[0].numericValue;
+  setTimeout(() => (bar.style.width = `${Math.min(serverLoad, 100)}%`), 50);
+
+  if (window.serverChart) {
+    window.serverChart.data.datasets[0].data = [
+      Math.random() * 100,
+      Math.random() * 100,
+      Math.random() * 100,
+      Math.random() * 100
+    ];
+    window.serverChart.update();
+  }
+}
   renderMetrics();
   setInterval(renderMetrics, 4000);
 
+  // Tasks
   let tasks = loadData("tasks") || [];
   const taskListEl = document.getElementById("task-list");
 
@@ -268,6 +328,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
     saveData("tasks", tasks);
     renderTasks();
   });
- renderTasks();
+  renderTasks();
 }
 });

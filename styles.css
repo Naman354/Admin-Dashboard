@@ -1,6 +1,6 @@
 :root {
   --bg: #f6f7fb;
-  --text: #0f172a;
+  --text: #02194f;
   --muted: #6b7280;
   --accent: #2563eb;
 }
@@ -23,7 +23,7 @@ body {
 
 .sidebar {
   width: 220px;
-  background: #0f172a;
+  background: var(--text);
   color: #fff;
   padding: 1rem;
   display: flex;
@@ -139,7 +139,8 @@ button:hover {
   margin-right: 0.4rem;
 }
 
-.home-welcome, .home-tasks {
+.home-welcome,
+.home-tasks {
   margin-bottom: 2rem;
 }
 
@@ -170,4 +171,51 @@ button:hover {
 
 .metrics h3 {
   margin-bottom: 0.75rem;
+}
+
+.metric-bar {
+  width: 100%;
+  height: 12px;
+  background: #e5e7eb; 
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 8px;
+  box-sizing: border-box;
+}
+
+.metric-bar-fill {
+  height: 100%;
+  background: var(--text);
+  width: 0%;
+  transition: width 0.8s ease-out;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+#metric-cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap; 
+}
+
+.server-load-card {
+  flex: 2; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px; 
+}
+
+.other-metrics {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.server-load-extra {
+  margin-top: 1rem;
+  height: 150px;
+  background: #f3f4f6; 
+  border-radius: 8px;
 }
