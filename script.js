@@ -180,118 +180,127 @@ document.addEventListener("DOMContentLoaded", ()=> {
     }
     showUsers();
   } 
-  function showHome() {
-  const totalUsers = users.length;
-  const admins = users.filter(u => u.role === "Admin").length;
-  const editors = users.filter(u => u.role === "Editor").length;
-  const viewers = users.filter(u => u.role === "Viewer").length;
+    function showHome() {
+    const totalUsers = users.length;
+    const admins = users.filter(u => u.role === "Admin").length;
+    const editors = users.filter(u => u.role === "Editor").length;
+    const viewers = users.filter(u => u.role === "Viewer").length;
 
-  content.innerHTML = `
-    <section class="home-welcome">
-      <h2>Welcome back, Admin!</h2>
-      <p>Here's a quick snapshot of your dashboard:</p>
-      <div class="cards">
-        <div class="card"><strong>${totalUsers}</strong><div>Total Users</div></div>
-        <div class="card"><strong>${admins}</strong><div>Admins</div></div>
-        <div class="card"><strong>${editors}</strong><div>Editors</div></div>
-        <div class="card"><strong>${viewers}</strong><div>Viewers</div></div>
-        <div class="card" id="current-time"><strong>${new Date().toLocaleTimeString()}</strong><div>Current Time</div></div>
-      </div>
-    </section>
-
-    <section class="metrics">
-      <h3>System Metrics</h3>
-      <div class="cards" id="metric-cards"></div>
-    </section>
-  `;
-
-  const timeEl = document.getElementById("current-time");
-  setInterval(() => {
-    timeEl.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong><div>Current Time</div>`;
-  }, 1000);
-
-  const metricData = [
-    { name: "Server Load", value: () => (Math.random() * 100).toFixed(1), unit: "%", hasBar: true },
-    { name: "API Requests", value: () => Math.floor(Math.random() * 10000), unit: "", hasBar: false },
-    { name: "Active Sessions", value: () => Math.floor(Math.random() * 500), unit: "", hasBar: false },
-    { name: "DB Latency", value: () => (Math.random() * 120).toFixed(2), unit: " ms", hasBar: true },
-    { name: "Error Rate", value: () => (Math.random() * 3).toFixed(2), unit: "%", hasBar: true }
-  ];
-
-  const metricCards = document.getElementById("metric-cards");
-function renderMetrics() {
-  const metricValues = metricData.map(m => {
-    const rawVal = m.value();
-    const numericValue = parseFloat(rawVal);
-    return { ...m, rawVal, numericValue };
-  });
-
-  if (!document.querySelector("#server-load-chart")) {
-    metricCards.innerHTML = `
-      <div class="server-load-card card">
-        <h3>Server Load</h3>
-        <p class="metric-value">${metricValues[0].rawVal}${metricValues[0].unit}</p>
-        <div class="metric-bar">
-          <div class="metric-bar-fill" style="width: 0%;"></div>
+    content.innerHTML = `
+        <section class="home-welcome">
+        <h2>Welcome back, Admin!</h2>
+        <p>Here's a quick snapshot of your dashboard:</p>
+        <div class="cards">
+            <div class="card"><strong>${totalUsers}</strong><div>Total Users</div></div>
+            <div class="card"><strong>${admins}</strong><div>Admins</div></div>
+            <div class="card"><strong>${editors}</strong><div>Editors</div></div>
+            <div class="card"><strong>${viewers}</strong><div>Viewers</div></div>
+            <div class="card" id="current-time"><strong>${new Date().toLocaleTimeString()}</strong><div>Current Time</div></div>
         </div>
-        <canvas id="server-load-chart" width="200" height="150"></canvas>
-      </div>
-      <div class="other-metrics">
-        ${metricValues.slice(1).map(m => `
-          <div class="card metric-card">
-            <h3>${m.name}</h3>
-            <p class="metric-value">${m.rawVal}${m.unit}</p>
-          </div>
-        `).join("")}
-      </div>
+        </section>
+
+        <section class="metrics">
+        <h3>System Metrics</h3>
+        <div class="cards" id="metric-cards"></div>
+        </section>
     `;
 
-    const ctx = document.getElementById("server-load-chart").getContext("2d");
-    window.serverChart = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: ["CPU", "Memory", "Disk", "Network"],
-        datasets: [{
-          label: "Usage %",
-          data: [30, 50, 60, 40],
-          fill: true,
-          backgroundColor: "rgba(37, 99, 235, 0.2)",
-          borderColor: "rgba(37, 99, 235, 1)",
-          tension: 0.4,
-          pointRadius: 5,
-          pointBackgroundColor: "rgba(37, 99, 235, 1)"
-        }]
-      },
-      options: {
-        responsive: true,
-        animation: { duration: 1000, easing: 'easeOutQuart' },
-        scales: {
-          y: { beginAtZero: true, max: 100, ticks: { stepSize: 25 } }
-        },
-        plugins: { legend: { display: false } }
-      }
-    });
-  }
+    const timeEl = document.getElementById("current-time");
+    setInterval(() => {
+        timeEl.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong><div>Current Time</div>`;
+    }, 1000);
 
-  const bar = document.querySelector(".server-load-card .metric-bar-fill");
-  const serverLoad = metricValues[0].numericValue;
-  setTimeout(() => (bar.style.width = `${Math.min(serverLoad, 100)}%`), 50);
-
-  if (window.serverChart) {
-    window.serverChart.data.datasets[0].data = [
-      Math.random() * 100,
-      Math.random() * 100,
-      Math.random() * 100,
-      Math.random() * 100
+    const metricData = [
+        { name: "Server Load", value: () => (Math.random() * 100).toFixed(1), unit: "%", hasBar: true },
+        { name: "API Requests", value: () => Math.floor(Math.random() * 10000), unit: "", hasBar: false },
+        { name: "Active Sessions", value: () => Math.floor(Math.random() * 500), unit: "", hasBar: false },
+        { name: "DB Latency", value: () => (Math.random() * 120).toFixed(2), unit: " ms", hasBar: true },
+        { name: "Error Rate", value: () => (Math.random() * 3).toFixed(2), unit: "%", hasBar: true }
     ];
-    window.serverChart.update();
-  }
-}
-  renderMetrics();
-  setInterval(renderMetrics, 4000);
+
+    const metricCards = document.getElementById("metric-cards");
+    function renderMetrics() {
+    const metricValues = metricData.map(m => {
+        const rawVal = m.value();
+        const numericValue = parseFloat(rawVal);
+        return { ...m, rawVal, numericValue };
+    });
+
+    if (!document.querySelector("#server-load-chart")) {
+        metricCards.innerHTML = `
+        <div class="server-load-card card">
+            <h3>Server Load</h3>
+            <p class="metric-value">${metricValues[0].rawVal}${metricValues[0].unit}</p>
+            <div class="metric-bar">
+            <div class="metric-bar-fill" style="width: 0%;"></div>
+            </div>
+            <canvas id="server-load-chart" width="200" height="150"></canvas>
+        </div>
+        <div class="other-metrics">
+            ${metricValues.slice(1).map(m => `
+            <div class="card metric-card">
+                <h3>${m.name}</h3>
+                <p class="metric-value">${m.rawVal}${m.unit}</p>
+            </div>
+            `).join("")}
+        </div>
+        `;
+
+        const ctx = document.getElementById("server-load-chart").getContext("2d");
+        window.serverChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: ["CPU", "Memory", "Disk", "Network"],
+            datasets: [{
+            label: "Usage %",
+            data: [30, 50, 60, 40],
+            fill: true,
+            backgroundColor: "rgba(37, 99, 235, 0.2)",
+            borderColor: "rgba(37, 99, 235, 1)",
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: "rgba(37, 99, 235, 1)"
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: { duration: 1000, easing: 'easeOutQuart' },
+            scales: {
+            y: { beginAtZero: true, max: 100, ticks: { stepSize: 25 } }
+            },
+            plugins: { legend: { display: false } }
+        }
+        });
+    }
+
+    const bar = document.querySelector(".server-load-card .metric-bar-fill");
+    const serverLoad = metricValues[0].numericValue;
+    setTimeout(() => (bar.style.width = `${Math.min(serverLoad, 100)}%`), 50);
+
+    document.querySelector(".server-load-card .metric-value").textContent =
+    metricValues[0].rawVal + metricValues[0].unit;
+
+const otherCards = document.querySelectorAll(".other-metrics .metric-card");
+otherCards.forEach((card, i) => {
+    const valEl = card.querySelector(".metric-value");
+    if (valEl) valEl.textContent = metricValues[i + 1].rawVal + metricValues[i + 1].unit;
+});
+
+    if (window.serverChart) {
+        window.serverChart.data.datasets[0].data = [
+        Math.random() * 100,
+        Math.random() * 100,
+        Math.random() * 100,
+        Math.random() * 100
+        ];
+        window.serverChart.update();
+    }
+    }
+    renderMetrics();
+    setInterval(renderMetrics, 4000);
 
 
-}
+    }
     function showTasks() {
         content.innerHTML=`
         <section class="home-tasks">
