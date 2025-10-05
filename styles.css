@@ -219,3 +219,18 @@ button:hover {
   background: #f3f4f6; 
   border-radius: 8px;
 }
+
+.task-item .delete-task-btn {
+  margin-left: 1rem; 
+}
+
+#logout {
+    color: #f44336;
+    font-weight: bold;
+    margin-left: 6px;
+    text-decoration: none;
+    cursor: pointer;
+}
+#logout:hover {
+    text-decoration: underline;
+}
