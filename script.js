@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", ()=> {
     document.getElementById("logout").addEventListener("click", (e) => {
     e.preventDefault();
-    localStorage.clear(); 
+    localStorage.removeItem("tasks"); 
     location.reload();    
 });
     const defaultUsers = [
-      { id: 1, name: "Alice Johnson", email: "alice@gmail.com", role: "Admin", createdAt: new Date().toISOString() },
-      { id: 2, name: "Bob Martin", email: "bob@gmail.com", role: "Editor", createdAt: new Date().toISOString() },
-      { id: 3, name: "Cara Lee", email: "cara@gmail.com", role: "Viewer", createdAt: new Date().toISOString() }
+      { id: 1, name: "Naman Srivastav", email: "naman@gmail.com", role: "Admin", createdAt: new Date().toISOString() },
+      { id: 2, name: "Navneet Sinha", email: "navni@gmail.com", role: "Editor", createdAt: new Date().toISOString() },
+      { id: 3, name: "Shivansh Gupta", email: "shishi@gmail.com", role: "Viewer", createdAt: new Date().toISOString() }
 ];
 
     let users = loadData("users") || defaultUsers;
