@@ -197,7 +197,7 @@ function onSearch(e) {
     searchTimeout = setTimeout(() => {
         searchText = query;
         showUsers();
-    }, 300); 
+    }, 1000); 
 }
 
     function sortBy(key) {
